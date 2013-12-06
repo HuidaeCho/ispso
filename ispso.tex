@@ -24,10 +24,10 @@
 
 \begin{document}
 
-\title{\ispsoR: R Script for Multi-Modal Optimization%
+\title{\ispsoR: R script for multi-modal optimization%
 \footnote{CITATION: Cho, Huidae, Kim, Dongkyun, Olivera, Francisco, Guikema, Seth D., 2011.  Enhanced Speciation in Particle Swarm Optimization for Multi-Modal Problems.  European Journal of Operational Research 213 (1), 15--23.}}
 \author{Huidae Cho}
-\date{\RCSDate\\Script Version 1.0, Document Revision \RCSRevision}
+\date{\RCSDate\\Script version 1.0, Document revision \RCSRevision}
 \maketitle
 
 \begin{abstract}
@@ -39,7 +39,7 @@
 \tableofcontents
 
 %-------------------------------------------------------------------------------
-\section{Prerequisite R Packages}
+\section{Prerequisite R packages}
 
 The \ispsoR\ script requires two packages directly and these dependency packages may need additional packages to be installed.
 You need to install the \fOptions\ and \plotrix\ packages.
@@ -59,14 +59,14 @@ Included in the ISPSO package are three R script files (\ispsoR, \funcsR, and \t
 \ispsoR\ defines the main function \ispso, \funcsR\ defines various test functions, and \testR\ provides example runs.
 
 %-------------------------------------------------------------------------------
-\section{\ispso: Main Function}
+\section{\ispso: Main function}
 
 \ispso\ takes one parameter named \s.
 The other two parameters \pop\ and \nest\ are used only for debugging purposes and this document does not discuss these parameters.
 \ispso\ returns an output list, which will be called \ret\ in this document for convenience.
 In the R prompt, you can type \texttt{ret <- ispso(s)} to start optimization.
 
-\subsection{\s: Input List}
+\subsection{\s: Input list}
 
 The \s\ parameter is a list that contains all the user variables that \ispso\ uses to determine how particles will move, when they will be nested, and when optimization will stop.
 
@@ -195,7 +195,7 @@ The \s\ parameter is a list that contains all the user variables that \ispso\ us
     If this option is 0, other criteria need to be met and this option is ignored.
 \end{description}
 
-\subsection{\ret: Output List}
+\subsection{\ret: Output list}
 
 You can assign the output of \ispso\ to a variable with any name, but, in this document, a variable name \ret\ is used for convenience.
 
@@ -219,7 +219,7 @@ You can assign the output of \ispso\ to a variable with any name, but, in this d
 %-------------------------------------------------------------------------------
 \section{Examples}
 
-\subsection{1-Dimensional Function}
+\subsection{1-dimensional function}
 
 \begin{equation*}
   F4(x)=1-\exp\left(-2\log(2)\cdot\left(\frac{x-0.08}{0.854}\right)^2\right)
@@ -254,7 +254,7 @@ ret <- ispso(s)
   \caption{$F4(x)$ versus $x$. The grey line represents $F4(x)$, the red crosses are true solutions, and the black X symbols are nests.}
 \end{figure}
 
-\subsection{Himmelblau Function}
+\subsection{Himmelblau function}
 
 \begin{equation*}
   F5(x_1, x_2)=(x_1^2+x_2-11)^2+(x_1+x_2^2-7)^2.
@@ -289,7 +289,7 @@ ret <- ispso(s)
   \caption{$x_2$ versus $x_1$ for the Himmelblau function. The grey line represents the objective function contours of $F5(\vec{x})$, the red crosses are true solutions, and the black X symbols are nests.}
 \end{figure}
 
-\subsection{Griewank Function}
+\subsection{Griewank function}
 
 \begin{equation*}
   F7(\vec{x})=
