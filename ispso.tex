@@ -59,14 +59,14 @@ Included in the ISPSO package are three R script files (\ispsoR, \funcsR, and \t
 \ispsoR\ defines the main function \ispso, \funcsR\ defines various test functions, and \testR\ provides example runs.
 
 %-------------------------------------------------------------------------------
-\section{\ispso: The Main Function}
+\section{\ispso: Main Function}
 
 \ispso\ takes one parameter named \s.
 The other two parameters \pop\ and \nest\ are used only for debugging purposes and this document does not discuss these parameters.
 \ispso\ returns an output list, which will be called \ret\ in this document for convenience.
 In the R prompt, you can type \texttt{ret <- ispso(s)} to start optimization.
 
-\subsection{\s: The Input List}
+\subsection{\s: Input List}
 
 The \s\ parameter is a list that contains all the user variables that \ispso\ uses to determine how particles will move, when they will be nested, and when optimization will stop.
 
@@ -195,7 +195,7 @@ The \s\ parameter is a list that contains all the user variables that \ispso\ us
     If this option is 0, other criteria need to be met and this option is ignored.
 \end{description}
 
-\subsection{\ret: The Output List}
+\subsection{\ret: Output List}
 
 You can assign the output of \ispso\ to a variable with any name, but, in this document, a variable name \ret\ is used for convenience.
 
