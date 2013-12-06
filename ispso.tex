@@ -1,0 +1,340 @@
+% $Id: ispso.tex,v 1.11 2011/12/19 04:56:31 geni Exp $
+\documentclass{article}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{rcs}
+
+\RCS $Revision: 1.11 $
+\RCS $Date: 2011/12/19 04:56:31 $
+
+\def\ispsoR{\texttt{ispso.R}}
+\def\funcsR{\texttt{funcs.R}}
+\def\testR{\texttt{test.R}}
+\def\ispsopdf{\texttt{ispso.pdf}}
+\def\ispso{\texttt{ispso}}
+\def\fOptions{\textbf{fOptions}}
+\def\plotrix{\textbf{plotrix}}
+\def\runifsobol{\texttt{runif.sobol}}
+\def\drawarc{\texttt{draw.arc}}
+\def\s{\texttt{s}}
+\def\pop{\texttt{pop}}
+\def\nest{\texttt{nest}}
+\def\ret{\texttt{ret}}
+
+\begin{document}
+
+\title{\ispsoR: R Script for Multi-Modal Optimization%
+\footnote{CITATION: Cho, Huidae, Kim, Dongkyun, Olivera, Francisco, Guikema, Seth D., 2011.  Enhanced Speciation in Particle Swarm Optimization for Multi-Modal Problems.  European Journal of Operational Research 213 (1), 15--23.}}
+\author{Huidae Cho}
+\date{\RCSDate\\Script Version 1.0, Document Revision \RCSRevision}
+\maketitle
+
+\begin{abstract}
+  The \ispsoR\ script implements the Isolated-Speciation-based Particle Swarm Optimization (ISPSO) algorithm introduced by \cite{Cho.ea.2011}.
+  This document explains what packages you need to install to be able to use the script, how to prepare the input list for the \ispso\ function, the main routine, and how to interpret the output list.
+  This software is available at \texttt{http://geni.ath.cx/ispso.html}.
+\end{abstract}
+
+\tableofcontents
+
+%-------------------------------------------------------------------------------
+\section{Prerequisite R Packages}
+
+The \ispsoR\ script requires two packages directly and these dependency packages may need additional packages to be installed.
+You need to install the \fOptions\ and \plotrix\ packages.
+
+\ispso\ takes quasi-random samples from the problem space.
+The \fOptions\ package provides the \runifsobol\ function, which takes Sobol' sequences \citep{Sobol'.1967} scrambled by the Owen and Faure-Tezuka scrambling schemes \citep{Owen.1998, Faure.Tezuka.2002}.
+
+\ispso\ can optionally draw a real-time $f(x)$--$x$ plot for 1-dimensional problems defined as $f(x)$, where $x$ is an input variable.
+If the problem dimension is higher than 1, the user can specify any two axes $x_i$ and $x_j$, and \ispso\ draws contour lines of the objective function, $f(\vec{x})$, projected to the $x_i$--$x_j$ surface.
+The real-time plot visualizes how particles are moving around in the problem space.
+As particles find a new solution (termed as nest), \ispso\ draws a circle at the new nest using the \drawarc\ function provided by the \plotrix\ package.
+
+%-------------------------------------------------------------------------------
+\section{What is in the package?}
+
+Included in the ISPSO package are three R script files (\ispsoR, \funcsR, and \testR) and one PDF file (\ispsopdf. Yes, you're reading it now).
+\ispsoR\ defines the main function \ispso, \funcsR\ defines various test functions, and \testR\ provides example runs.
+
+%-------------------------------------------------------------------------------
+\section{\ispso: The Main Function}
+
+\ispso\ takes one parameter named \s.
+The other two parameters \pop\ and \nest\ are used only for debugging purposes and this document does not discuss these parameters.
+\ispso\ returns an output list, which will be called \ret\ in this document for convenience.
+In the R prompt, you can type \texttt{ret <- ispso(s)} to start optimization.
+
+\subsection{\s: The Input List}
+
+The \s\ parameter is a list that contains all the user variables that \ispso\ uses to determine how particles will move, when they will be nested, and when optimization will stop.
+
+\begin{description}
+  \item[\texttt{s\$f}]
+    An objective function $f(\vec{x})$ to optimize that takes one double-type vector $\vec{x}$ as an input and returns a double as an output.
+    The output of the function is referred to as an objective function value or fitness value.
+    For testing purposes, \texttt{s\$f} can optionally take the second boolean-type parameter whose default value is FALSE.
+    If this parameter is FALSE, \texttt{s\$f} returns an objective function value as usual.
+    However, if this parameter is TRUE, \texttt{s\$f} returns a matrix that contain true solutions.
+    For real-world problems, this second parameter may not be defined because true solutions are usually not known.
+  \item[\texttt{s\$D}]
+    The dimension $D$ of the input vector of $f(\vec{x})$.
+    $D=|\vec{x}|$.
+  \item[\texttt{s\$xmin}]
+    A double-type vector containing the minimum values of the input vector elements.
+    $\vec{x}_\text{min}=\{x_{i,\text{min}}\,|\,x_{i,\text{min}}=\min(x_i)\}$ and $|\vec{x}_\text{min}|=D$.
+  \item[\texttt{s\$xmax}]
+    A double-type vector containing the maximum values of the input vector elements.
+    $\vec{x}_\text{max}=\{x_{i,\text{max}}\,|\,x_{i,\text{max}}=\max(x_i)\}$ and $|\vec{x}_\text{max}|=D$.
+  \item[\texttt{s\$vmax}]
+    The maximum velocity of particles ($D$-dimensional vector).
+    Between two consecutive iterations, particles are not allowed to move further than the maximum velocity in each axis.
+  \item[\texttt{s\$vmax0}]
+    The maximum speed of new particles (scalar).
+    New particles are not as fast as old ones.
+  \item[\texttt{s\$S}]
+    The swarm size $|S|$.
+    There will be exactly $|S|$ particles during optimization.
+  \item[\texttt{s\$c1}]
+    \textit{Optional.}
+    Default value: 2.05.
+    The cognitive coefficient $\psi_1$.
+  \item[\texttt{s\$c2}]
+    \textit{Optional.}
+    Default value: 2.05.
+    The social coefficient $\psi_2$.
+  \item[\texttt{s\$w}]
+    \textit{Optional.}
+    Default value: $\chi=\dfrac{2}{\left|2-\psi-\sqrt{\psi^2-4\psi}\right|}$ where $\psi=\psi_1+\psi_2>4$.
+    The constriction factor $\chi$ \citep{Clerc.1999}.
+  \item[\texttt{s\$rspecies}]
+    The species radius $r_\text{species}$.
+    Particles within distance $r_\text{species}$ from a species seed form a species and share information.
+  \item[\texttt{s\$rprey}]
+    The prey radius $r_\text{prey}$.
+    Fitness assimiliation will happen if inferior particles approach a superior particle within distance $r_\text{prey}$.
+  \item[\texttt{s\$rnest}]
+    The nest radius $r_\text{nest}$.
+    Once a solution---referred as a nest---is found, no particles are allowed to approach the existing nest if they are within distance $r_\text{nest}$ from the nest.
+  \item[\texttt{s\$age}]
+    The age threshold $a$.
+    The experience of particles younger than the age threshold $a$ is not trusted and those particles cannot nest.
+  \item[\texttt{s\$xeps}]
+    The threshold value $\epsilon_x$ for the normalized geometric mean.
+    If the normalized geometric mean of a particle's past halflife trajectory is smaller than or equal to $\epsilon_x$, one criterion for nesting is considered satisfied.
+  \item[\texttt{s\$feps}]
+    The threshold value $\epsilon_f$ for the standard deviation of a particle's past halflife fitness values.
+    If the standard deviatoin of a particle's past halflife fitness values is smaller than or equal to $\epsilon_f$, another criterion for nesting is considered satisfied.
+    If the $a$, $\epsilon_x$, and $\epsilon_f$ thresholds are all satisfied, a solution or nest is added.
+  \item[\texttt{s\$exclusion\_factor}]
+    The exclusion factor $f_E$.
+    One of the challenges that multi-modal optimizers face is that it is not straightforward to determine when to stop optimization earlier than a pre-defined maximum number of iterations.
+    The more global and local minima are found, the more frequently exclusion happens because there will be more and more nests.
+    The exclusion factor is used to define on average how many exclusions per nest need to happen before optimization stops.
+    If the exclusion factor is not defined, this criterion is not used for stopping.
+  \item[\texttt{s\$maxiter}]
+    The maximum number of iterations.
+    Optimization can stop earlier if the exclusion factor criterion is met first.
+  \item[\texttt{s\$.deterministic}]
+    \textit{Optional.}
+    Default value: \texttt{FALSE}.
+    \ispso\ generates psuedo-random numbers and Sobol' sequences for particle movement and speciation.
+    By default, these numbers are randomly generated.
+    If you want to run \ispso\ deterministically by starting from a default state (no previous runs) or restarting from the previous state, set \texttt{s\$.deterministic} to \texttt{TRUE}.
+    If you have run \ispso\ before and R saved the last state, you can replay the previous run by setting it to \texttt{TRUE}.
+  \item[\texttt{s\$.plot\_method}]
+    \textit{Optional.}
+    Default value: \texttt{"movement"}.
+    \begin{description}
+      \item[\texttt{""}]
+	No plot.
+      \item[\texttt{"movement"}]
+	Shows particle movement one iteration at a time.
+      \item[\texttt{"movement,species"}]
+	Shows particle movement with speciation circles.
+      \item[\texttt{"density"}]
+	Shows accumulated particle locations.
+      \item[\texttt{"profile"}]
+	Shows the number of nests versus the number of function evaluations.
+      \item[\texttt{"diversity"}]
+	Shows diversity in the current iteration versus the number of iterations.
+	Diversity is defined as $\dfrac{\sum_{i=1}^{|S|}\sqrt{\sum_{d=1}^D\left(x_{i,d}-\overline{x_d}\right)^2}}{|S|}$, where $x_{i,d}$ is the coordinate in axis $d$ of particle $i$ and $\overline{x_d}$ is the mean coordinate in axis $d$ of all the particles in the current iteration.
+      \item[\texttt{"mean\_diversity"}]
+	Shows the mean diversity versus the number of iterations.
+	The mean diversity is the average of all the diversities until the current iteration.
+    \end{description}
+  \item[\texttt{s\$.plot\_x}]
+    \textit{Optional.}
+    Default value: texttt{1:2}.
+    Only applies when $D>1$.
+    Two axes to plot.
+    If $D=1$, $f(x_1)$ versus $x_1$ is always plotted.
+  \item[\texttt{s\$.plot\_delay}]
+    \textit{Optional.}
+    Default value: \texttt{0}.
+    Delay in seconds between plots.
+  \item[\texttt{s\$.plot\_distance\_to\_solution}]
+    \textit{Optional.}
+    Default value: 0.05.
+    Only applies when $f(\vec{x})$ implements the optional boolean-type parameter that allows the function to return true solutions.
+    Because true solutions are known, \ispso\ can draw circles at the known solutions to show how well optimization is performing.
+    This option specifies the radius in a fraction of the diagonal length of the search space or $\sqrt{\sum_{i=1}^D\left(x_{i,\text{max}}-x_{i,\text{min}}\right)^2}$.
+  \item[\texttt{s\$.plot\_save\_prefix}]
+    \textit{Optional.}
+    Default value: \texttt{""}.
+    The prefix of plot files.
+    If this option is specified, a PNG file will be saved at every iteration.
+  \item[\texttt{s\$.stop\_after\_solutions}]
+    \textit{Optional.}
+    Default value: 0.
+    Only applies when $f(\vec{x})$ implements the optional boolean-type parameter that allows the function to return true solutions.
+    Because true solutions are known, \ispso\ can determine whether or not it found all the solutions.
+    If there are too many solutions, \ispso\ can decide to stop early without finding them all.
+    This option species the number of solutions that \ispso\ need to find before stopping.
+    If this option is 0, other criteria need to be met and this option is ignored.
+\end{description}
+
+\subsection{\ret: The Output List}
+
+You can assign the output of \ispso\ to a variable with any name, but, in this document, a variable name \ret\ is used for convenience.
+
+\begin{description}
+  \item[\texttt{ret\$iter}]
+    The number of iterations \ispso\ performed.
+  \item[\texttt{ret\$evals}]
+    The number of function evaluations \ispso\ performed.
+  \item[\texttt{ret\$nest}]
+    Nests that \ispso\ found.
+    This output is a matrix that contains all the nests found.
+    The matrix has columns named \texttt{x1}\dots\texttt{x}\textit{D}, \texttt{f}, \texttt{v}, \texttt{age}, and \texttt{evals}, where \textit{D} is the problem dimension, \texttt{x1}\dots\texttt{x}\textit{D} are the coordinates of the nest, \texttt{f} is the objective function value, \texttt{v} and \texttt{age} are the final velocity and age of the particle, respectively, and \texttt{evals} is the number of function evaluations required to find the nest.
+    Each row of the matrix represents one nest \ispso\ found and the number of rows is the same as the number of nests.
+  \item[\texttt{ret\$pop}]
+    Population or all the particle positions that \ispso\ evaluated.
+    This output is a matrix that contains all the particle positions that \ispso\ evaluated during optimization.
+    The matrix has columns named \texttt{x1}\dots\texttt{x}\textit{D}, \texttt{f}, \texttt{v}, and \texttt{age}, where \textit{D} is the problem dimension, \texttt{x1}\dots\texttt{x}\textit{D} are the coordinates of the particle, \texttt{f} is the objective function value, and \text{v} and \texttt{are} are the velocity and age of the particle, respectively.
+    Since this matrix contains all the particle positions, \texttt{ret\$pop[0:(ret\$iter-1)*s\$S+$i$,]} will return the trajectory of particle $i$.
+\end{description}
+
+%-------------------------------------------------------------------------------
+\section{Examples}
+
+\subsection{1-Dimensional Function}
+
+\begin{equation*}
+  F4(x)=1-\exp\left(-2\log(2)\cdot\left(\frac{x-0.08}{0.854}\right)^2\right)
+    \cdot\sin^6\left(5\pi(x^{3/4}-0.05)\right).
+\end{equation*}
+
+\begin{verbatim}
+source("ispso.R")
+source("funcs.R")
+s <- list()
+s$f <- f4
+s$D <- 1
+s$xmin <- 0
+s$xmax <- 1
+s$S <- 10 + floor(2*sqrt(s$D))
+s$vmax <- (s$xmax-s$xmin)*0.1
+s$vmax0 <- diagonal(s)*0.001
+s$exclusion_factor <- 3
+s$maxiter <- 200
+s$xeps <- 0.001
+s$feps <- 0.0001
+s$rprey <- diagonal(s)*0.0001
+s$age <- 10
+s$rspecies <- diagonal(s)*0.1
+s$rnest <- diagonal(s)*0.01
+ret <- ispso(s)
+\end{verbatim}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{f4.png}
+  \caption{$F4(x)$ versus $x$. The grey line represents $F4(x)$, the red crosses are true solutions, and the black X symbols are nests.}
+\end{figure}
+
+\subsection{Himmelblau Function}
+
+\begin{equation*}
+  F5(x_1, x_2)=(x_1^2+x_2-11)^2+(x_1+x_2^2-7)^2.
+\end{equation*}
+
+\begin{verbatim}
+source("ispso.R")
+source("funcs.R")
+s <- list()
+s$f <- himmelblau
+s$D <- 2
+s$xmin <- rep(-6, s$D)
+s$xmax <- rep(6, s$D)
+s$S <- 10 + floor(2*sqrt(s$D))
+s$vmax <- (s$xmax-s$xmin)*0.1
+s$vmax0 <- diagonal(s)*0.001
+s$exclusion_factor <- 3
+s$maxiter <- 200
+s$xeps <- 0.001
+s$feps <- 0.0001
+s$rprey <- diagonal(s)*0.0001
+s$age <- 10
+s$rspecies <- diagonal(s)*0.1
+s$rnest <- diagonal(s)*0.01
+s$.plot_distance_to_solution <- 0.01
+ret <- ispso(s)
+\end{verbatim}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{himmelblau.png}
+  \caption{$x_2$ versus $x_1$ for the Himmelblau function. The grey line represents the objective function contours of $F5(\vec{x})$, the red crosses are true solutions, and the black X symbols are nests.}
+\end{figure}
+
+\subsection{Griewank Function}
+
+\begin{equation*}
+  F7(\vec{x})=
+    \frac{1}{4000}\sum_{i=1}^2x_i^2
+    -\prod_{i=1}^2\cos\left(\frac{x_i}{\sqrt{i}}\right)+1
+\end{equation*}
+
+Because the Griewank function has an exponentially growing number of minima with increasing dimensions \citep{Cho.ea.2008}, it is fairly difficult to find all minima.
+In a statistical test using \ispso\ and the Griewank function \citep{Cho.2008}, it took $11,455\pm 1,252$ function evaluations to find $98.06\pm 2.26\%$ of all the minima of the 2-dimensional Griewank funciton within $[-14,\,14]^2$.
+You need a lot more iterations compared to other functions to find more minima.
+
+\begin{verbatim}
+source("ispso.R")
+source("funcs.R")
+s <- list()
+s$f <- griewank
+s$D <- 2
+s$xmin <- rep(-14, s$D)
+s$xmax <- rep(14, s$D)
+s$S <- 10 + floor(2*sqrt(s$D))
+s$vmax <- (s$xmax-s$xmin)*0.1
+s$vmax0 <- diagonal(s)*0.001
+s$maxiter <- 2000
+s$xeps <- 0.001
+s$feps <- 0.0001
+s$rprey <- diagonal(s)*0.0001
+s$age <- 10
+s$rspecies <- diagonal(s)*0.1
+s$rnest <- diagonal(s)*0.01
+s$.plot_distance_to_solution <- 0.01
+ret <- ispso(s)
+\end{verbatim}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{griewank.png}
+  \caption{$x_2$ versus $x_1$ for the Griewank function. The grey line represents the objective function contours of $F7(\vec{x})$, the red crosses are true solutions, and the black X symbols are nests.}
+\end{figure}
+
+%-------------------------------------------------------------------------------
+\section{Applications}
+
+ISPSO has successfully been applied to the optimization of the Soil and Water Assessment Tool (SWAT), a hydrologic and environmental model, \citep{Cho.2008} and the Modified Barlett-Lewis Rectangular Pulse (MBLRP) model, a stochastic rainfall generator, \citep{Cho.ea.2011}.
+
+\bibliographystyle{elsart-harv}
+\bibliography{geni}
+
+\end{document}
