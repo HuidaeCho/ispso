@@ -382,18 +382,22 @@ printf("\b\b\b\bf(x[%d,])=%g added at iter=%d, run=%d, evals=%d, nest=%d\n", i, 
 
 printf("\b\b\b\b%d%%", min(100, myround(
 	100*(num_exclusions/s$S)/(s$exclusion_factor*func_difficulty))))
-		if(num_exclusions/s$S > s$exclusion_factor*func_difficulty)
+
+		if(!s$dont_stop &&
+			num_exclusions/s$S > s$exclusion_factor*func_difficulty)
 			return(TRUE)
 	}
 
-	if(s$.stop_after_solutions > 0)
-		return(s$.stop_after_solutions == mynrow(nest))
+	if(!s$dont_stop){
+		if(s$.stop_after_solutions > 0)
+			return(s$.stop_after_solutions == mynrow(nest))
 
-	if(!.have_sols || !s$.stop_after_solutions ||
-		is.null(nest) || nrow(nest) < length(found))
-		return(FALSE)
+		if(s$.stop_after_solutions < 0 && .have_sols &&
+			!is.null(nest) && nrow(nest) == length(found))
+			return(TRUE)
+	}
 
-	return(TRUE)
+	return(FALSE)
 	# End of NEST_BY_AGE}
 }
 
@@ -527,6 +531,10 @@ new_v <- function(n=1){
 					     s$.plot_save_prefix,
 					     floor(log10(s$maxiter)+1))
 
+	# Don't stop the algorithm until s$maxiter? FALSE by default
+	if(is.null(s$dont_stop))
+		s$dont_stop <- FALSE
+
 	# Constriction PSO (Clerc and Kennedy, 2000)
 	if(is.null(s$c1))
 		s$c1 <- 2.05
@@ -540,19 +548,17 @@ new_v <- function(n=1){
 
 	# PSO
 	if(s$.deterministic){
+		if(!exists("seed.sobol"))
+			seed.sobol <<- 4711
 		if(exists("seed.random"))
 			.Random.seed <<- seed.random
 		else{
 			set.seed(0)
 			seed.random <<- .Random.seed
 		}
-		if(!exists("seed.sobol"))
-			seed.sobol <<- 4711
 	}else{
-		if(!exists(".Random.seed"))
-			runif(1)
-		seed.random <<- .Random.seed
 		seed.sobol <<- as.integer(runif(1)*100000)
+		seed.random <<- .Random.seed
 	}
 
 	x <- if(is.null(pop)) new_x(s$S, seed.sobol)
