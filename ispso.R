@@ -6,7 +6,7 @@
 #
 # Requires: R <http://r-project.org> and R packages: fOptions, plotrix
 #
-# Available at: http://geni.ath.cx/ispso.html
+# Available at: http://idea.isnew.info/ispso
 #
 # Cite this software as:
 #   Cho, H., Kim, D., Olivera, F., Guikema, S. D., 2011. Enhanced Speciation in
