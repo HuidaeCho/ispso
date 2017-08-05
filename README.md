@@ -32,3 +32,7 @@ ret <- ispso(s)
 ```
 
 ![Finding global and local minima in the Griewank function](griewank.gif "Finding global and local minima in the Griewank function")
+
+## License
+
+GNU General Public License Version 3
