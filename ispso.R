@@ -2,7 +2,7 @@
 # Isolated-Speciation-based Particle Swarm Optimization (ISPSO) extends
 # Species-based PSO (SPSO) for finding multiple global and local minima.
 #
-# Author: Huidae Cho, Ph.D. <hcho.eng@gmail.com>, Texas A&M University
+# Author: Huidae Cho, Ph.D. <grass4u@gmail.com>, Texas A&M University
 #
 # Requires: R <http://r-project.org> and R packages: fOptions, plotrix
 #
@@ -14,7 +14,7 @@
 #   Operational Research 213 (1), 15-23.
 #
 # Isolated-Speciation-based Particle Swarm Optimization (ISPSO)
-# Copyright (C) 2008  Huidae Cho
+# Copyright (C) 2008, Huidae Cho <https://idea.isnew.info>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
