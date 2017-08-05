@@ -1,7 +1,6 @@
 # Purpose: Defines test functions.
 # Functions: f1, f2, f3, f4, himmelblau, rastrigin, griewank, bimodal,
 # rosenbrock, ackley, levy5, spherical, quadric
-# $Id: funcs.R,v 1.2 2011/12/17 22:20:59 geni Exp $
 
 f1 <- function(x, sol=FALSE){
 	if(sol){

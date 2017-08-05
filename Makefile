@@ -1,4 +1,3 @@
-# $Id: Makefile,v 1.6 2011/12/18 16:01:58 geni Exp $
 LATEX=pdflatex -src-specials
 BIBTEX=bibtex
 VERSION=$(shell cat VERSION)

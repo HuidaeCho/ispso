@@ -1,7 +1,6 @@
 # Purpose: Provides an input file for various tests.
 # Requires: ispso.R, funcs.R
 # Variables: s, ret, res
-# $Id: test.R,v 1.3 2011/12/17 22:20:59 geni Exp $
 
 source("ispso.R")
 source("funcs.R")

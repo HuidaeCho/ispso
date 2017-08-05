@@ -28,8 +28,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-# $Id: ispso.R,v 1.7 2011/12/19 04:56:31 geni Exp $
 ################################################################################
 
 library("fOptions") # runif.sobol
