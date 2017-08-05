@@ -33,6 +33,8 @@
 library("fOptions") # runif.sobol
 library("plotrix") # draw.arc
 
+diagonal <- function(s) sqrt(sum((s$xmax-s$xmin)^2))
+
 ispso <- function(s, pop=c(), nest=c()){
 ################################################################################
 # SUBROUTINES
@@ -47,7 +49,6 @@ plotswarm <- function(s)
 	1
 plotmethod <- function(s, method)
 	any(unlist(strsplit(s$.plot_method, ","))==method)
-diagonal <- function(s) sqrt(sum((s$xmax-s$xmin)^2))
 mydist <- function(s, ...) as.matrix(dist(if(s$D == 1) c(...) else rbind(...)))
 mydist2 <- function(...) sqrt(sum((...)^2))
 mynrow <- function(x) if(is.null(x)) 0 else if(is.vector(x)) 1 else nrow(x)

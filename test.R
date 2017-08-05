@@ -5,8 +5,6 @@
 source("ispso.R")
 source("funcs.R")
 
-diagonal <- function(s) sqrt(sum((s$xmax-s$xmin)^2))
-
 set_parameters <- function(s){
 	########################################################################
 	# DEBUG
