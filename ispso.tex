@@ -288,6 +288,41 @@ ret <- ispso(s)
   \caption{$x_2$ versus $x_1$ for the Himmelblau function. The grey line represents the objective function contours of $F5(\vec{x})$, the red crosses are true solutions, and the black X symbols are nests.}
 \end{figure}
 
+\subsection{Rastrigin function}
+
+\begin{equation*}
+  F6(\vec{x})=\sum_{i=1}^D\left[x_i^2-10\cos(2\pi x_i)+10\right].
+\end{equation*}
+
+\begin{verbatim}
+source("ispso.R")
+source("funcs.R")
+s <- list()
+s$f <- rastrigin
+s$D <- 2
+s$xmin <- rep(-1.5, s$D)
+s$xmax <- rep(1.5, s$D)
+s$S <- 10 + floor(2*sqrt(s$D))
+s$vmax <- (s$xmax-s$xmin)*0.1
+s$vmax0 <- diagonal(s)*0.001
+s$exclusion_factor <- 3
+s$maxiter <- 200
+s$xeps <- 0.001
+s$feps <- 0.0001
+s$rprey <- diagonal(s)*0.0001
+s$age <- 10
+s$rspecies <- diagonal(s)*0.1
+s$rnest <- diagonal(s)*0.01
+s$.plot_distance_to_solution <- 0.01
+ret <- ispso(s)
+\end{verbatim}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{rastrigin.png}
+  \caption{$x_2$ versus $x_1$ for the Rastrigin function. The grey line represents the objective function contours of $F6(\vec{x})$, the red crosses are true solutions, and the black X symbols are nests.}
+\end{figure}
+
 \subsection{Griewank function}
 
 \begin{equation*}
