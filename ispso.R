@@ -6,7 +6,7 @@
 #
 # Requires: R <http://r-project.org> and R packages: fOptions, plotrix
 #
-# Available at: http://idea.isnew.info/ispso
+# Available at: https://idea.isnew.info/ispso.html
 #
 # Cite this software as:
 #   Cho, H., Kim, D., Olivera, F., Guikema, S. D., 2011. Enhanced Speciation in
@@ -35,22 +35,26 @@
 library("fOptions") # runif.sobol
 library("plotrix") # draw.arc
 
-myeval <- function(..., n=1) eval.parent(parse(text=sprintf(...)), n=n)
+ispso <- function(s, pop=c(), nest=c()){
+################################################################################
+# SUBROUTINES
+################################################################################
+
 mytryCatch <- function(expr, error) tryCatch(expr, error=function(e) error)
+plotswarm <- function(s)
+	s$.plot_method != "" &&
+	s$.plot_method != "profile" &&
+	s$.plot_method != "diversity" &&
+	s$.plot_method != "mean_diversity" &&
+	1
+plotmethod <- function(s, method)
+	any(unlist(strsplit(s$.plot_method, ","))==method)
+diagonal <- function(s) sqrt(sum((s$xmax-s$xmin)^2))
+mydist <- function(s, ...) as.matrix(dist(if(s$D == 1) c(...) else rbind(...)))
+mydist2 <- function(...) sqrt(sum((...)^2))
 mynrow <- function(x) if(is.null(x)) 0 else if(is.vector(x)) 1 else nrow(x)
 myncol <- function(x)
 	if(is.null(x)) 0 else if(is.vector(x)) length(x) else ncol(x)
-myround <- function(x, digits=0) floor(x*10^digits+0.5)/10^digits
-mydist <- function(s, ...) as.matrix(dist(if(s$D == 1) c(...) else rbind(...)))
-mydist2 <- function(...) sqrt(sum((...)^2))
-printf <- function(...){
-	sink("log.txt", append=TRUE)
-	cat(sprintf(...))
-	sink()
-}
-printf <- function(...) cat(sprintf(...))
-dprintf <- function(...) printf(...)
-dprintf <- function(...) return()
 colmax <- function(x, ...){
 	ret <- c()
 	for(i in 1:myncol(x)) ret[i] <- max(x[,i], ...)
@@ -61,38 +65,7 @@ colmin <- function(x, ...){
 	for(i in 1:myncol(x)) ret[i] <- min(x[,i], ...)
 	ret
 }
-rowmax <- function(x, ...){
-	ret <- c()
-	for(i in 1:mynrow(x)) ret[i] <- max(x[i,], ...)
-	ret
-}
-rowmin <- function(x, ...){
-	ret <- c()
-	for(i in 1:mynrow(x)) ret[i] <- min(x[i,], ...)
-	ret
-}
-getseed <- function() list(random=seed.random, sobol=seed.sobol)
-setseed <- function(seed){
-	seed.random <<- seed$random
-	seed.sobol <<- seed$sobol
-}
-plotswarm <- function(s)
-	s$.plot_method != "" &&
-	s$.plot_method != "profile" &&
-	s$.plot_method != "diversity" &&
-	s$.plot_method != "mean_diversity" &&
-	1
-plotmethod <- function(s, method)
-	any(unlist(strsplit(s$.plot_method, ","))==method)
-diagonal <- function(s) sqrt(sum((s$xmax-s$xmin)^2))
-hyperball <- function(n, r) pi^(n/2)*r^n/gamma(n/2+1)
-hyperr <- function(s, v)
-	(v*prod(s$xmax-s$xmin)*gamma(s$D/2+1)/pi^(s$D/2))^(1/s$D)
-
-ispso <- function(s, pop=c(), nest=c()){
-################################################################################
-# SUBROUTINES
-################################################################################
+myround <- function(x, digits=0) floor(x*10^digits+0.5)/10^digits
 
 ################################################################################
 # Evaluate function values.
