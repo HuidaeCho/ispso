@@ -33,6 +33,7 @@
 library("fOptions") # runif.sobol
 library("plotrix") # draw.arc
 
+printf <- function(...) cat(sprintf(...))
 diagonal <- function(s) sqrt(sum((s$xmax-s$xmin)^2))
 
 ispso <- function(s, pop=c(), nest=c()){
