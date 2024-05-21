@@ -5,6 +5,11 @@ ispso.R implements the Isolated-Speciation-based Particle Swarm Optimization alg
 
 ISPSO is a multi-modal optimization algorithm that aims to discover global and local minima. This algorithm has successfully been used in stochastic rainfall generation, climate change, storm tracking, hydrology, and hydraulics studies.
 
+Install `fOptions` from `https://r-forge.r-project.org/`:
+```R
+install.packages("fOptions", repos="https://r-forge.r-project.org/")
+```
+
 ## Griewank Function
 
 ```
