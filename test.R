@@ -205,7 +205,7 @@ test <- function(func.name){
 
 	res <- c()
 	# True solutions
-	sol <- s$f(rep(0, s$D), TRUE)
+	sol <- s$f(rep(0, s$D), sol=TRUE)
 	# Number of solutions
 	nsols <- mynrow(sol)
 	# Number of nests

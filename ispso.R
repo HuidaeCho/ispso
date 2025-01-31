@@ -81,7 +81,7 @@ if(plotmethod(s, "movement"))
 		ylim=c(min(.F), max(.F)), xlab="x1", ylab="f(x1)")
 #{DEBUG: We don't know true solutions in real problems.
 if(.have_sols){
-	.x <- s$f(x[1,], TRUE)
+	.x <- s$f(x[1,], sol=TRUE)
 	.fnest <- c()
 	for(.x1 in .x) .fnest <- c(.fnest, s$f(.x1))
 	points(.x, .fnest, pch=3, cex=2, lwd=2, col="red")
@@ -112,7 +112,7 @@ if(plotmethod(s, "movement")){
 }
 #{DEBUG: We don't know true solutions in real problems.
 if(.have_sols){
-	.x <- s$f(x[1,], TRUE)
+	.x <- s$f(x[1,], sol=TRUE)
 	points(matrix(.x[,s$.plot_x], nrow(.x), 2),
 		pch=3, cex=2, lwd=2, col="red")
 	draw.arc(.x[,s$.plot_x[1]], .x[,s$.plot_x[2]],
@@ -488,7 +488,7 @@ new_v <- function(n=1){
 		s$.plot_save_prefix <- ""
 	#-----------------------------------------------------------------------
 	# Does the user provide the real solutions to s$f?
-	if(any(mytryCatch(s$f(rep(0, s$D), TRUE), "no_sols") == "no_sols"))
+	if(any(mytryCatch(s$f(rep(0, s$D), sol=TRUE), "no_sols") == "no_sols"))
 		.have_sols <- FALSE
 	else
 		.have_sols <- TRUE
@@ -552,7 +552,7 @@ new_v <- function(n=1){
 	species <- c()
 	#{DEBUG: We don't know true solutions in real problems.
 	if(.have_sols)
-		found <- rep(0, nrow(s$f(x[1,], TRUE)))
+		found <- rep(0, nrow(s$f(x[1,], sol=TRUE)))
 	#}
 
 #-DEBUG-------------------------------------------------------------------------
