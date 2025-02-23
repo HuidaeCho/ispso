@@ -69,8 +69,9 @@ set_parameters <- function(s){
 	invisible(s)
 }
 
-test <- function(func.name){
+test <- function(func.name, parallel=FALSE){
 	s <- list()
+	s$parallel <- parallel
 	if(func.name == "f1"){
 		s$f <- eval(parse(text=func.name))
 		s$D <- 1

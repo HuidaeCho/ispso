@@ -30,6 +30,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
+library("parallel") # s$parallel
 library("fOptions") # runif.sobol
 library("plotrix") # draw.arc
 
@@ -131,9 +132,11 @@ prev_f <<- f
 }
 }
 #-------------------------------------------------------------------------------
-	f <<- c()
+	f <<- if(s$parallel) unlist(clusterApply(s$cl, 1:s$S, function(i) s$f(x[i,], core=i)))
+		else c()
 	for(i in 1:s$S){
-		f[i] <<- s$f(x[i,])
+		if(!s$parallel)
+			f[i] <<- s$f(x[i,])
 		if(f[i] < pbest[i, s$D+1] ||
 			(f[i] == Inf && pbest[i, s$D+1] == Inf)){
 			pbest[i,] <<- c(x[i,], f[i])
@@ -516,6 +519,10 @@ new_v <- function(n=1){
 	if(is.null(s$w))
 		s$w <- 2/abs(2-s$c1-s$c2-sqrt((s$c1+s$c2)^2-4*(s$c1+s$c2)))
 
+	# Parallel run?
+	if(is.null(s$parallel))
+		s$parallel <- FALSE
+
 	BEST <- Inf
 	WORST <- -BEST
 
@@ -583,6 +590,13 @@ if(s$D >= 2){
 	evals <- iter <- 0
 	num_exclusions_per_nest <- c()
 	num_exclusions <- 0
+	if(s$parallel){
+		if(is.null(s$cl)){
+			cl_internal <- TRUE
+			s$cl <- makeCluster(s$S)
+		}else
+			cl_internal <- FALSE
+	}
 	repeat{
 		iter <- iter + 1
 		diversity[iter] <- mean(sqrt(rowSums(t(t(x)-colMeans(x))^2)))
@@ -621,6 +635,11 @@ if(.plot_save_format != ""){
 if(s$.plot_method != "" && s$.plot_delay > 0)
 		Sys.sleep(s$.plot_delay)
 #-------------------------------------------------------------------------------
+	}
+
+	if(s$parallel && cl_internal){
+		stopCluster(s$cl)
+		s$cl <- NULL
 	}
 
 #-DEBUG-------------------------------------------------------------------------
