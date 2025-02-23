@@ -132,6 +132,7 @@ prev_f <<- f
 }
 }
 #-------------------------------------------------------------------------------
+print(s$parallel)
 	f <<- if(s$parallel) unlist(clusterApply(s$cl, 1:s$S, function(i) s$f(x[i,], core=i)))
 		else c()
 	for(i in 1:s$S){
@@ -291,19 +292,7 @@ if(s$D >= 2){
 
 	v <<- t(pmax(t(v), -s$vmax))
 	v <<- t(pmin(t(v), s$vmax))
-
-	#{Confinement: random forth
-	for(i in 1:s$S){
-		j <- which(x[i,]+v[i,]<s$xmin)
-		k <- length(j)
-		if(k)
-			v[i, j] <<- (x[i, j]-s$xmin[j])*runif(k)
-		j <- which(x[i,]+v[i,]>s$xmax)
-		k <- length(j)
-		if(k)
-			v[i, j] <<- (s$xmax[j]-x[i, j])*runif(k)
-	}
-	# End of confinement}
+	adjust_v()
 
 	V <<- sqrt(rowSums(v^2))
 	pop <<- rbind(pop, cbind(x, f, v=V, age))
@@ -347,6 +336,7 @@ check_for_convergence <- function(){
 printf("\b\b\b\bf(x[%d,])=%g added at iter=%d, run=%d, evals=%d, nest=%d\n", i, f[i], iter, run, evals, nrow(nest))
 		}
 	}
+	adjust_v()
 
 	if(!is.null(nest) && !is.null(s$exclusion_factor) && num_exclusions){
 		delta_sol_iters <- (nest[, s$D+4]-
@@ -411,6 +401,7 @@ update_x <- function(){
 			age[j] <<- 0
 		}
 	}
+	adjust_v()
 	# End of PREY}
 
 	#{CHECK_NESTS
@@ -433,6 +424,7 @@ update_x <- function(){
 			}
 		}
 	}
+	adjust_v()
 	# End of CHECK_NESTS}
 }
 
@@ -459,6 +451,24 @@ new_v <- function(n=1){
 
 .runif.sobol <- function(n, dimension, init=TRUE, scrambling=0, seed=4711)
 	matrix(runif(n*dimension), n, dimension)
+
+################################################################################
+# Adjust velocities
+################################################################################
+adjust_v <- function(){
+	#{Confinement: random forth
+	for(i in 1:s$S){
+		j <- which(x[i,]+v[i,]<s$xmin)
+		k <- length(j)
+		if(k)
+			v[i, j] <<- (x[i, j]-s$xmin[j])*runif(k)
+		j <- which(x[i,]+v[i,]>s$xmax)
+		k <- length(j)
+		if(k)
+			v[i, j] <<- (s$xmax[j]-x[i, j])*runif(k)
+	}
+	# End of confinement}
+}
 
 ################################################################################
 # VARIABLES
@@ -544,6 +554,7 @@ new_v <- function(n=1){
 	x <- if(is.null(pop)) new_x(s$S, seed.sobol)
 		else pop[order(-pop[,"f"])[1:s$S],1:s$D]
 	v <- new_v(s$S)
+	adjust_v()
 
 	pbest <- matrix(nrow=s$S, ncol=s$D+1)
 	gbest <- c()
@@ -590,6 +601,7 @@ if(s$D >= 2){
 	evals <- iter <- 0
 	num_exclusions_per_nest <- c()
 	num_exclusions <- 0
+
 	if(s$parallel){
 		if(is.null(s$cl)){
 			cl_internal <- TRUE
@@ -597,6 +609,7 @@ if(s$D >= 2){
 		}else
 			cl_internal <- FALSE
 	}
+
 	repeat{
 		iter <- iter + 1
 		diversity[iter] <- mean(sqrt(rowSums(t(t(x)-colMeans(x))^2)))
