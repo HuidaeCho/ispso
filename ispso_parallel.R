@@ -586,7 +586,7 @@ if(s$D >= 2){
 	num_exclusions <- 0
 	if(is.null(s$cl)){
 		cl_internal <- TRUE
-		s$cl <- makeCluster(1)#s$S)
+		s$cl <- makeCluster(s$S)
 	}else
 		cl_internal <- FALSE
 	repeat{
