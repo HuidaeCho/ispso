@@ -82,7 +82,7 @@ if(plotmethod(s, "movement"))
 		ylim=c(min(.F), max(.F)), xlab="x1", ylab="f(x1)")
 #{DEBUG: We don't know true solutions in real problems.
 if(.have_sols){
-	.x <- s$f(x[1,], sol=TRUE)
+	.x <- s$f(x[1,], list(sol=TRUE))
 	.fnest <- c()
 	for(.x1 in .x) .fnest <- c(.fnest, s$f(.x1))
 	points(.x, .fnest, pch=3, cex=2, lwd=2, col="red")
@@ -113,7 +113,7 @@ if(plotmethod(s, "movement")){
 }
 #{DEBUG: We don't know true solutions in real problems.
 if(.have_sols){
-	.x <- s$f(x[1,], sol=TRUE)
+	.x <- s$f(x[1,], list(sol=TRUE))
 	points(matrix(.x[,s$.plot_x], nrow(.x), 2),
 		pch=3, cex=2, lwd=2, col="red")
 	draw.arc(.x[,s$.plot_x[1]], .x[,s$.plot_x[2]],
@@ -132,7 +132,7 @@ prev_f <<- f
 }
 }
 #-------------------------------------------------------------------------------
-	f <<- if(s$parallel) unlist(clusterApply(s$cl, 1:s$S, function(i) s$f(x[i,], core=i)))
+	f <<- if(s$parallel) unlist(clusterApply(s$cl, 1:s$S, function(i) s$f(x[i,], list(core=i, iter=iter))))
 		else c()
 	for(i in 1:s$S){
 		if(!s$parallel)
@@ -500,7 +500,7 @@ adjust_v <- function(){
 		s$.plot_save_prefix <- ""
 	#-----------------------------------------------------------------------
 	# Does the user provide the real solutions to s$f?
-	if(any(mytryCatch(s$f(rep(0, s$D), sol=TRUE), "no_sols") == "no_sols"))
+	if(any(mytryCatch(s$f(rep(0, s$D), list(sol=TRUE)), "no_sols") == "no_sols"))
 		.have_sols <- FALSE
 	else
 		.have_sols <- TRUE
@@ -569,7 +569,7 @@ adjust_v <- function(){
 	species <- c()
 	#{DEBUG: We don't know true solutions in real problems.
 	if(.have_sols)
-		found <- rep(0, nrow(s$f(x[1,], sol=TRUE)))
+		found <- rep(0, nrow(s$f(x[1,], list(sol=TRUE))))
 	#}
 
 #-DEBUG-------------------------------------------------------------------------

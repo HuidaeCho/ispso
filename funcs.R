@@ -2,8 +2,10 @@
 # Functions: f1, f2, f3, f4, himmelblau, rastrigin, griewank, bimodal,
 # rosenbrock, ackley, levy5, spherical, quadric
 
-f1 <- function(x, core=1, sol=FALSE){
-	if(sol){
+opt.sol <- function(opt) "sol" %in% names(opt) && opt$sol
+
+f1 <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [0, 1]
 		return(matrix(c(
 			0.1,
@@ -17,8 +19,8 @@ f1 <- function(x, core=1, sol=FALSE){
 	1 - sin(5*pi*x)^6
 }
 
-f2 <- function(x, core=1, sol=FALSE){
-	if(sol){
+f2 <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [0, 1]
 		return(matrix(c(
 			0.1,
@@ -32,8 +34,8 @@ f2 <- function(x, core=1, sol=FALSE){
 	1 - exp(-2*log(2)*((x-0.1)/0.8)^2)*sin(5*pi*x)^6
 }
 
-f3 <- function(x, core=1, sol=FALSE){
-	if(sol){
+f3 <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [0, 1]
 		return(matrix(c(
 			0.08,
@@ -47,8 +49,8 @@ f3 <- function(x, core=1, sol=FALSE){
 	1 - sin(5*pi*(x^(3/4)-0.05))^6
 }
 
-f4 <- function(x, core=1, sol=FALSE){
-	if(sol){
+f4 <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [0, 1]
 		return(matrix(c(
 			0.08,
@@ -62,8 +64,8 @@ f4 <- function(x, core=1, sol=FALSE){
 	1 - exp(-2*log(2)*((x-0.08)/0.854)^2)*sin(5*pi*(x^(3/4)-0.05))^6
 }
 
-f5 <- himmelblau <- function(x, core=1, sol=FALSE){
-	if(sol){
+f5 <- himmelblau <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [-6, 6]^2
 		return(matrix(c(
 			3.0, 2.0,
@@ -79,12 +81,12 @@ f5 <- himmelblau <- function(x, core=1, sol=FALSE){
 		(x[1]^2+x[2]-11)^2+(x[1]+x[2]^2-7)^2
 }
 
-f6 <- rastrigin <- function(x, core=1, sol=FALSE){
+f6 <- rastrigin <- function(x, opt=NA){
 	if(is.matrix(x))
 		return(apply(x, 1, rastrigin))
 
 	n <- length(x)
-	if(sol){
+	if(opt.sol(opt)){
 		# x = [-1.5, 1.5]^n
 		return(rastrigin.sols(rep(-1.5, n), rep(1.5, n)))
 	}
@@ -109,12 +111,12 @@ f6.sols <- rastrigin.sols <- function(xmin, xmax){
 	return(x)
 }
 
-f7 <- griewank <- function(x, core=1, sol=FALSE){
+f7 <- griewank <- function(x, opt=NA){
 	if(is.matrix(x))
 		return(apply(x, 1, griewank))
 
 	n <- length(x)
-	if(sol){
+	if(opt.sol(opt)){
 		# x = [-14, 14]^n
 		return(griewank.sols(rep(-14, n), rep(14, n)))
 	}
@@ -170,8 +172,8 @@ f7.num_sols <- griewank.num_sols <- function(d, xmin, xmax){
 	}
 }
 
-bimodal <- function(x, core=1, sol=FALSE){
-	if(sol){
+bimodal <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [-4, 8]
 		return(matrix(c(
 			0, 4
@@ -181,9 +183,9 @@ bimodal <- function(x, core=1, sol=FALSE){
 	1 - (1/(sqrt(2*pi))*exp(-0.5*x^2) + 2/(sqrt(2*pi))*exp(-0.5*(2*x-8)^2))
 }
 
-rosenbrock <- function(x, core=1, sol=FALSE){
+rosenbrock <- function(x, opt=NA){
 	n <- length(x)
-	if(sol){
+	if(opt.sol(opt)){
 		# x = [-10, 10]^n
 		# f(x) = 0
 		return(matrix(rep(1, n), 1, n))
@@ -196,9 +198,9 @@ rosenbrock <- function(x, core=1, sol=FALSE){
 }
 
 
-ackley <- function(x, core=1, sol=FALSE){
+ackley <- function(x, opt=NA){
 	n <- length(x)
-	if(sol){
+	if(opt.sol(opt)){
 		# x = [-32.768, 32.768]^n
 		# f(x) = 0
 		return(matrix(rep(0, n), 1, n))
@@ -207,8 +209,8 @@ ackley <- function(x, core=1, sol=FALSE){
 	-20*exp(-0.2*sqrt(sum(x^2)/n))-exp(sum(cos(2*pi*x))/n)+20+exp(1)
 }
 
-levy5 <- function(x, core=1, sol=FALSE){
-	if(sol){
+levy5 <- function(x, opt=NA){
+	if(opt.sol(opt)){
 		# x = [-10, 10]^n
 		# 760 local minima
 		# 1 global minimum f(x) = -176.1375 at x = (-1.3068, -1.4248)
@@ -222,9 +224,9 @@ levy5 <- function(x, core=1, sol=FALSE){
 		(x[1]+1.42513)^2+(x[2]+0.80032)^2
 }
 
-spherical <- function(x, core=1, sol=FALSE){
+spherical <- function(x, opt=NA){
 	n <- length(x)
-	if(sol){
+	if(opt.sol(opt)){
 		# x = [-5.12, 5.12]^n
 		# one global minimum f(x) = 0 at x = (0, ..., 0)
 		return(matrix(rep(0, n), 1, n))
@@ -233,9 +235,9 @@ spherical <- function(x, core=1, sol=FALSE){
 	sum(x^2)
 }
 
-quadric <- function(x, core=1, sol=FALSE){
+quadric <- function(x, opt=NA){
 	n <- length(x)
-	if(sol){
+	if(opt.sol(opt)){
 		# f(x) = 0
 		return(matrix(rep(0, n), 1, n))
 	}
