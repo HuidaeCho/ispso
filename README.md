@@ -38,9 +38,13 @@ ret <- ispso(s)
 
 ![Finding global and local minima in the Griewank function](griewank.gif "Finding global and local minima in the Griewank function")
 
+## Acknowledgments
+
+Development of the parallelization features in ISPSO (Parallel ISPSO or PISPSO) was supported in part by the USGS Water Resources Research Act 104(b) grant [NM_2023_Cho](https://water.usgs.gov/wrri/grant-details.php?ProjectID=2023NM163B&Type=Annual) through the New Mexico Water Resources Research Institute ([NM WRRI](https://nmwrri.nmsu.edu/)) under award GR0007017, as part of USGS Grant/Cooperative Agreement No. G21AP10635, along with an additional internal award from the NM WRRI. PISPSO is a general-purpose parallel optimization algorithm and was successfully applied to [SWAT+](https://swat.tamu.edu/software/plus/) optimization runs. This algorithm may be applied to other modeling frameworks using independent resources.
+
 ## License
 
-Copyright (C) 2008, Huidae Cho <<https://idea.isnew.info>>
+Copyright (C) 2008-2025, Huidae Cho <<https://idea.isnew.info/>>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
