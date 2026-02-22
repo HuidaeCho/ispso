@@ -132,7 +132,9 @@ prev_f <<- f
 }
 }
 #-------------------------------------------------------------------------------
-	f <<- if(s$parallel) unlist(clusterApply(s$cl, 1:s$S, function(i) s$f(x[i,], list(core=i, iter=iter))))
+	f <<- if(s$parallel) unlist(clusterApply(s$cl, 1:s$S, function(i)
+						 s$f(x[i,], list(core=i, S=s$S,
+								 iter=iter))))
 		else c()
 	for(i in 1:s$S){
 		if(!s$parallel)
