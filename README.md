@@ -8,6 +8,7 @@ ISPSO is a multi-modal optimization algorithm that aims to discover global and l
 ## Installation
 
 ```R
+library(remotes)
 remotes::install_github("HuidaeCho/ispso")
 
 # or if you want to build vignettes
