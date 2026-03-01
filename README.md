@@ -5,35 +5,22 @@ ispso.R implements the Isolated-Speciation-based Particle Swarm Optimization alg
 
 ISPSO is a multi-modal optimization algorithm that aims to discover global and local minima. This algorithm has successfully been used in stochastic rainfall generation, climate change, storm tracking, hydrology, and hydraulics studies.
 
-Install `fOptions` from `https://r-forge.r-project.org/`:
+## Installation
+
 ```R
-install.packages("fOptions", repos="https://r-forge.r-project.org/")
+remotes::install_github("HuidaeCho/ispso")
+
+# or if you want to build vignettes
+remotes::install_github("HuidaeCho/ispso", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
-## Griewank Function
+## Testing
 
-```
-source("ispso.R")
-source("funcs.R")
-
-s <- list()
-s$f <- griewank
-s$D <- 2
-s$xmin <- rep(-14, s$D)
-s$xmax <- rep(14, s$D)
-s$S <- 10 + floor(2*sqrt(s$D))
-s$vmax <- (s$xmax-s$xmin)*0.1
-s$vmax0 <- diagonal(s)*0.001
-s$maxiter <- 2000
-s$xeps <- 0.001
-s$feps <- 0.0001
-s$rprey <- diagonal(s)*0.0001
-s$age <- 10
-s$rspecies <- diagonal(s)*0.1
-s$rnest <- diagonal(s)*0.01
-s$.plot_distance_to_solution <- 0.01
-
-ret <- ispso(s)
+```R
+library(ispso)
+source(system.file("benchmarks", "funcs.R", package = "ispso"))
+source(system.file("benchmarks", "benchmark.R", package = "ispso"))
+run_benchmark("griewank")
 ```
 
 ![Finding global and local minima in the Griewank function](griewank.gif "Finding global and local minima in the Griewank function")
