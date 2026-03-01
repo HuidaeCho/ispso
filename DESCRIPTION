@@ -1,0 +1,12 @@
+Package: ispso
+Title: Isolated-Speciation-Based Particle Swarm Optimization
+Version: 0.1.0
+Authors@R: person("Huidae", "Cho", email = "grass4u@gmail.com", role = c("aut", "cre"))
+Description: Provides a multi-modal optimization algorithm that aims to discover global and local minima.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: parallel, randtoolbox, plotrix
+Suggests: quarto
+VignetteBuilder: quarto
