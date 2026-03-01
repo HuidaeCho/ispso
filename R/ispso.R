@@ -263,7 +263,11 @@ ispso <- function(
           fn(
             x[i, ],
             list(
-              worker = .ispso_worker_id,
+              worker_id = get(
+                "worker_id",
+                envir = .ispso_state,
+                inherits = FALSE
+              ),
               S = control$S,
               iter = iter,
               run = (iter - 1) * control$S + i
