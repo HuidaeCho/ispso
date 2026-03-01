@@ -12,6 +12,9 @@ remotes::install_github("HuidaeCho/ispso")
 
 # or if you want to build vignettes
 remotes::install_github("HuidaeCho/ispso", build_vignettes = TRUE, dependencies = TRUE)
+
+# read the vignette
+vignette("ispso")
 ```
 
 ## Testing
