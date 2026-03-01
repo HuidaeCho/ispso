@@ -12,7 +12,7 @@ library(remotes)
 remotes::install_git("git@github.com:HuidaeCho/ispso.git")
 
 # or if you want to build vignettes
-remotes::install_github("git@github.com:HuidaeCho/ispso.git", build_vignettes = TRUE, dependencies = TRUE)
+remotes::install_git("git@github.com:HuidaeCho/ispso.git", build_vignettes = TRUE, dependencies = TRUE)
 
 # read the vignette
 vignette("ispso")
