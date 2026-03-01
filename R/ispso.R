@@ -734,12 +734,22 @@ ispso <- function(
   rnest <- diag_span * control$rnest_factor
 
   parallel <- !is.null(control$cluster)
-  if (parallel && length(control$cluster) > control$S) {
-    warning(sprintf(
-      "Cluster size (%d) exceeds swarm size (%d); extra workers will remain idle.",
-      length(control$cluster),
-      control$S
-    ))
+  if (parallel) {
+    if (length(control$cluster) > control$S) {
+      warning(sprintf(
+        "Cluster size (%d) exceeds swarm size (%d); extra workers will remain idle.",
+        length(control$cluster),
+        control$S
+      ))
+    }
+    parallel::clusterApply(
+      control$cluster,
+      seq_along(control$cluster),
+      function(id) {
+        assign("worker_id", id, envir = .ispso_state)
+        NULL
+      }
+    )
   }
 
   #-----------------------------------------------------------------------------
