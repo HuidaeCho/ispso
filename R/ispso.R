@@ -263,11 +263,7 @@ ispso <- function(
           fn(
             x[i, ],
             list(
-              worker_id = get(
-                "worker_id",
-                envir = .ispso_state,
-                inherits = FALSE
-              ),
+              worker_id = get("worker_id", envir = .GlobalEnv),
               S = control$S,
               iter = iter,
               run = (iter - 1) * control$S + i
@@ -746,8 +742,7 @@ ispso <- function(
       control$cluster,
       seq_along(control$cluster),
       function(id) {
-        .ispso_state <- new.env(parent = emptyenv())
-        assign("worker_id", id, envir = .ispso_state)
+        assign("worker_id", id, envir = .GlobalEnv)
         NULL
       }
     )
