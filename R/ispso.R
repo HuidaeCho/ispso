@@ -704,8 +704,8 @@ ispso <- function(
   ##############################################################################
 
   ndim <- length(bounds)
-  xmin <- sapply(bounds, `[`, 1)
-  xmax <- sapply(bounds, `[`, 2)
+  xmin <- vapply(bounds, `[`, numeric(1), 1)
+  xmax <- vapply(bounds, `[`, numeric(1), 2)
 
   diag_span <- sqrt(sum((xmax - xmin)^2))
 
