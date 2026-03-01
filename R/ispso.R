@@ -718,6 +718,13 @@ ispso <- function(
   rnest <- diag_span * control$rnest_factor
 
   parallel <- !is.null(control$cluster)
+  if (parallel && length(control$cluster) > control$S) {
+    warning(sprintf(
+      "Cluster size (%d) exceeds swarm size (%d); extra workers will remain idle.",
+      length(control$cluster),
+      control$S
+    ))
+  }
 
   #-----------------------------------------------------------------------------
   # default values for debugging variables
