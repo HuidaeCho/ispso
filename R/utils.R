@@ -39,7 +39,6 @@
 #' @param .plot_delay Numeric, optional. Internal/debug plotting delay.
 #'
 #' @return Named list of control parameters for \code{ispso()}.
-#'
 #' @export
 ispso_control <- function(
   # ---- Core swarm / stopping parameters ----
@@ -139,7 +138,6 @@ ispso_control <- function(
 #'   overrides the default rule.
 #'
 #' @return Integer. Suggested swarm size \code{S}.
-#'
 #' @export
 ispso_swarm_size <- function(bounds, control = NULL) {
   if (
