@@ -23,7 +23,7 @@ source(system.file("benchmarks", "benchmark.R", package = "ispso"))
 run_benchmark("griewank")
 ```
 
-![Finding global and local minima in the Griewank function](griewank.gif "Finding global and local minima in the Griewank function")
+![Finding global and local minima in the Griewank function](vignettes/figures/griewank.gif "Finding global and local minima in the Griewank function")
 
 ## Acknowledgments
 
