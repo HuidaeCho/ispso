@@ -256,9 +256,21 @@ ispso <- function(
     }
     #---------------------------------------------------------------------------
     f <<- if (parallel) {
-      unlist(parallel::clusterApply(control$cluster, 1:control$S, function(i) {
-        fn(x[i, ], list(core = i, S = control$S, iter = iter))
-      }))
+      unlist(parallel::clusterApplyLB(
+        control$cluster,
+        seq_len(control$S),
+        function(i) {
+          fn(
+            x[i, ],
+            list(
+              worker = .ispso_worker_id,
+              S = control$S,
+              iter = iter,
+              run = (iter - 1) * control$S + i
+            )
+          )
+        }
+      ))
     } else {
       c()
     }
