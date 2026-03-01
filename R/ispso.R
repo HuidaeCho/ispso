@@ -746,6 +746,7 @@ ispso <- function(
       control$cluster,
       seq_along(control$cluster),
       function(id) {
+        .ispso_state <- new.env(parent = emptyenv())
         assign("worker_id", id, envir = .ispso_state)
         NULL
       }
