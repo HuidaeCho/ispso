@@ -709,9 +709,7 @@ ispso <- function(
 
   diag_span <- sqrt(sum((xmax - xmin)^2))
 
-  if (is.null(control$S)) {
-    control$S <- 10 + floor(2 * sqrt(ndim))
-  }
+  control$S <- ispso_swarm_size(bounds, control)
 
   vmax <- (xmax - xmin) * control$vmax_factor
   vmax0 <- diag_span * control$vmax0_factor

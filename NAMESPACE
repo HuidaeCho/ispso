@@ -2,3 +2,4 @@
 
 export(ispso)
 export(ispso_control)
+export(ispso_swarm_size)

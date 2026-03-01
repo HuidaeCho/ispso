@@ -121,3 +121,35 @@ ispso_control <- function(
     .plot_delay = .plot_delay
   )
 }
+
+#' Compute the ISPSO swarm size.
+#'
+#' Computes the swarm size \code{S} from the number of parameters implied by
+#' \code{bounds}. If \code{control$S} is provided, it is returned unchanged.
+#' Otherwise, the default rule is used: \eqn{S = 10 + \lfloor 2\sqrt{D} \rfloor},
+#' where \eqn{D} is the number of parameters.
+#'
+#' This helper is useful when external workflows (e.g., SWAT+ runs) need to
+#' allocate per-worker resources before calling \code{\link{ispso}}.
+#'
+#' @param bounds Named list of length \eqn{D}. Each element is a numeric vector
+#'   of length 2 giving the lower and upper bounds for one parameter.
+#' @param control Named list, optional. Control parameters created by
+#'   \code{\link{ispso_control}}. If \code{control$S} is not \code{NULL}, it
+#'   overrides the default rule.
+#'
+#' @return Integer. Suggested swarm size \code{S}.
+#'
+#' @export
+ispso_swarm_size <- function(bounds, control = NULL) {
+  if (
+    !is.null(control) &&
+      !is.null(control$S) &&
+      is.numeric(control$S) &&
+      control$S > 1
+  ) {
+    return(as.integer(control$S))
+  }
+
+  as.integer(10L + floor(2 * sqrt(length(bounds))))
+}

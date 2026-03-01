@@ -110,7 +110,7 @@ run_benchmark <- function(func_name, parallel = FALSE) {
 
     nest <- ret$nest[too_far < nsols, ]
     error <- error[too_far < nsols]
-    max.error <- max(error)
+    max_error <- max(error)
 
     if (
       mynrow(ret$nest) == nsols &&
@@ -121,7 +121,7 @@ run_benchmark <- function(func_name, parallel = FALSE) {
     }
   } else {
     nest <- ret$nest
-    max.error <- NA
+    max_error <- NA
   }
 
   invisible(list(
@@ -131,6 +131,6 @@ run_benchmark <- function(func_name, parallel = FALSE) {
     ret = ret,
     success = success,
     nest = nest,
-    max.error = max.error
+    max_error = max_error
   ))
 }
