@@ -1,3 +1,13 @@
+mynrow <- function(x) {
+  if (is.null(x)) {
+    0
+  } else if (is.vector(x)) {
+    1
+  } else {
+    nrow(x)
+  }
+}
+
 make_control <- function(parallel = FALSE) {
   control <- ispso_control(
     .plot_method = "movement"
@@ -90,7 +100,7 @@ run_benchmark <- function(func_name, parallel = FALSE) {
     for (i in 1:nsols) {
       fmin <- fn(sol[i, ])
       for (j in 1:nnests) {
-        d <- as.matrix(dist(
+        d <- as.matrix(stats::dist(
           if (ndim == 1) {
             c(sol[i, 1], ret$nest[j, 1])
           } else {
@@ -116,7 +126,7 @@ run_benchmark <- function(func_name, parallel = FALSE) {
       mynrow(ret$nest) == nsols &&
         sum(ndupnests == rep(1, nsols)) == nsols
     ) {
-      printf("\b\b\b\bGREAT!\n")
+      cat(sprintf("\b\b\b\bGREAT!\n"))
       success <- TRUE
     }
   } else {
