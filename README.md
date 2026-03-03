@@ -21,10 +21,7 @@ vignette("ispso")
 ## Testing
 
 ```R
-library(ispso)
-source(system.file("benchmarks", "funcs.R", package = "ispso"))
-source(system.file("benchmarks", "benchmark.R", package = "ispso"))
-run_benchmark("griewank")
+ispso:::run_benchmark("griewank")
 ```
 
 ![Finding global and local minima in the Griewank function](vignettes/figures/griewank.gif "Finding global and local minima in the Griewank function")
