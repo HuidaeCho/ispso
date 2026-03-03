@@ -31,7 +31,7 @@ run_benchmark("griewank")
 
 ## Acknowledgments
 
-Development of the parallelization features in ISPSO (Parallel ISPSO or PISPSO) was supported in part by the [USGS](https://www.usgs.gov/) Water Resources Research Act 104(b) grant [NM_2023_Cho](https://water.usgs.gov/wrri/grant-details.php?ProjectID=2023NM163B&Type=Annual) through the New Mexico Water Resources Research Institute ([NM WRRI](https://nmwrri.nmsu.edu/)) under award GR0007017, as part of USGS Grant/Cooperative Agreement No. G21AP10635, along with an additional internal award from the NM WRRI. PISPSO is a general-purpose parallel optimization algorithm and was successfully applied to [SWAT+](https://swat.tamu.edu/software/plus/) optimization runs. This algorithm may be applied to other modeling frameworks using independent resources.
+The development of the parallelization features in ISPSO (Parallel ISPSO or PISPSO) was supported in part by the [USGS](https://www.usgs.gov/) Water Resources Research Act 104(b) grant [NM_2023_Cho](https://water.usgs.gov/wrri/grant-details.php?ProjectID=2023NM163B&Type=Annual) through the New Mexico Water Resources Research Institute ([NM WRRI](https://nmwrri.nmsu.edu/)) under award GR0007017, as part of USGS Grant/Cooperative Agreement No. G21AP10635, along with an additional internal award from the NM WRRI. PISPSO is a general-purpose parallel optimization algorithm and was successfully applied to [SWAT+](https://swat.tamu.edu/software/plus/) optimization runs. This algorithm may be applied to other modeling frameworks using independent resources.
 
 ## License
 
