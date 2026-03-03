@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-# https://posit-dev.github.io/air/
+# curl -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh
 air format . inst/CITATION
 Rscript -e 'devtools::document()'
 pkg="ispso_$(sed '/Version/!d; s/.* //' DESCRIPTION).tar.gz"
