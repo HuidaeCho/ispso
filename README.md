@@ -12,7 +12,7 @@ install.packages("remotes")
 remotes::install_git("git@github.com:HuidaeCho/ispso.git")
 
 # or if you want to build vignettes
-remotes::install_git("git@github.com:HuidaeCho/ispso.git", build_vignettes = TRUE, dependencies = TRUE)
+remotes::install_git("git@github.com:HuidaeCho/ispso.git", build_vignettes=TRUE, dependencies=TRUE)
 
 # read the vignette
 vignette("ispso")
@@ -25,6 +25,10 @@ ispso:::run_benchmark("griewank")
 ```
 
 ![Finding global and local minima in the Griewank function](vignettes/figures/griewank.gif "Finding global and local minima in the Griewank function")
+
+## SWAT+ISPSO adapter
+
+For SWAT+ optimization, please see [swatia](https://github.com/HydroCSLab/swatia).
 
 ## Acknowledgments
 
