@@ -30,7 +30,7 @@ ispso:::run_benchmark("griewank")
 
 ## SWAT+ISPSO adapter
 
-For SWAT+ optimization, please see [swatia](https://github.com/HydroCSLab/swatia).
+For [SWAT+](https://swat.tamu.edu/software/plus/) optimization, please see [swatia](https://github.com/HydroCSLab/swatia).
 
 ## Acknowledgments
 
