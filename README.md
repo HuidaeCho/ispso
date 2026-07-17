@@ -1,7 +1,7 @@
 # ISPSO
 Isolated-Speciation-Based Particle Swarm Optimization <<https://idea.isnew.info/ispso.html>>
 
-This R package implements the Isolated-Speciation-Based Particle Swarm Optimization algorithm published in [Cho, Huidae, Kim, Dongkyun, Olivera, Francisco, Guikema, Seth D., 2011. Enhanced Speciation in Particle Swarm Optimization for Multi-Modal Problems. European Journal of Operational Research 213 (1), 15--23](https://doi.org/10.1016/j.ejor.2011.02.026).
+This R package implements the Isolated-Speciation-Based Particle Swarm Optimization algorithm published in [Cho, H., Kim, D., Olivera, F., Guikema, S. D., 2011. Enhanced Speciation in Particle Swarm Optimization for Multi-Modal Problems. European Journal of Operational Research 213 (1), 15--23](https://doi.org/10.1016/j.ejor.2011.02.026).
 
 ISPSO is a multi-modal optimization algorithm that aims to discover global and local minima. This algorithm has successfully been used in stochastic rainfall generation, climate change, storm tracking, hydrology, and hydraulics studies.
 
